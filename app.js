@@ -230,10 +230,13 @@ const auth = {
                 const savedPic = userData.getProfilePic();
                 if (savedPic) {
                     // Shows Profile Pic if logged in
-                    mobileTopAuth.innerHTML = `<button onclick="navigateWithLoader('account.html')"><img src="${savedPic}" class="w-7 h-7 rounded-full object-cover border border-gray-200 shadow-sm"></button>`;
+                    mobileTopAuth.innerHTML = `<a href="account.html"><img src="${savedPic}" class="w-7 h-7 rounded-full object-cover border border-gray-200 shadow-sm"></a>`;
                 } else {
                     // Shows User Icon if logged in but no pic
-                    mobileTopAuth.innerHTML = `<button onclick="navigateWithLoader('login.html')"><i data-lucide="user" class="w-6 h-6 text-gray-800"></i></button>`;
+                    mobileTopAuth.innerHTML = ` <a href="account.html" class="flex items-center gap-2 hover:text-gold transition group">
+                        <div class="p-2 bg-gray-100 rounded-full group-hover:bg-black group-hover:text-white transition"><i data-lucide="user" class="w-4 h-4"></i></div>
+                        <span class="md:inline text-sm font-medium"></span>
+                    </a>`;
                 }
             } else {
                 // Shows "Login" text if Guest
