@@ -116,6 +116,11 @@
     <script>
         lucide.createIcons();
 
+        // NEW: Auth Guard - Redirects to login if the user is a guest!
+        if (!auth.getCurrentUser()) {
+            window.location.replace('login.html');
+        }
+        
         // 1. Load Profile Pic
         const savedPic = userData.getProfilePic();
         if(savedPic) document.getElementById('profile-img-display').src = savedPic;
