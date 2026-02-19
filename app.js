@@ -174,14 +174,13 @@ const auth = {
         const users = auth.getUsers();
         const userObj = users.find(u => u.email === userEmail);
         
-        // 1. Desktop Top Header Target
-        const authContainer = document.getElementById('auth-section');
-        // 2. Mobile Greeting Target
-        const mobileGreeting = document.getElementById('mobile-greeting');
-        // 3. Dock Icon Target (New!)
-        const dockAccountIcon = document.getElementById('dock-account-icon');
+        // Target Containers
+        const authContainer = document.getElementById('auth-section'); // Desktop Top Header
+        const mobileGreeting = document.getElementById('mobile-greeting'); // Mobile Search Area
+        const dockAccountIcon = document.getElementById('dock-account-icon'); // Smart Floating Dock Icon
+        const mobileTopAuth = document.getElementById('mobile-top-auth'); // NEW: Mobile Top Right Header
         
-        // Handle Top Header
+        // 1. Handle Top Header (Desktop)
         if (authContainer) {
             if (userObj) {
                 authContainer.innerHTML = `
@@ -194,6 +193,7 @@ const auth = {
                         <button onclick="auth.logout()" class="text-xs font-semibold text-gray-400 hover:text-red-600 transition-colors tracking-widest border-l pl-4 border-gray-200 h-4 flex items-center">LOGOUT</button>
                     </div>`;
             } else {
+                // UPDATED: Now uses navigateWithLoader instead of an <a> tag
                 authContainer.innerHTML = `
                     <a href="login.html" class="flex items-center gap-2 hover:text-gold transition group">
                         <div class="p-2 bg-gray-100 rounded-full group-hover:bg-black group-hover:text-white transition"><i data-lucide="user" class="w-4 h-4"></i></div>
@@ -202,7 +202,7 @@ const auth = {
             }
         }
 
-        // Handle Mobile Greeting
+        // 2. Handle Mobile Greeting
         if (mobileGreeting) {
             if (userObj) {
                 mobileGreeting.classList.remove('hidden');
@@ -212,17 +212,35 @@ const auth = {
             }
         }
 
-        // Handle Dock Icon (Smart Avatar)
+        // 3. Handle Dock Icon (Smart Avatar in Floating Nav)
         if (dockAccountIcon) {
             const savedPic = userData.getProfilePic();
             if (userObj && savedPic) {
-                // If logged in & has pic, show Image
                 dockAccountIcon.innerHTML = `<img src="${savedPic}" class="w-6 h-6 md:w-8 md:h-8 rounded-full object-cover border border-gray-200">`;
-                dockAccountIcon.classList.remove('p-1', 'bg-gray-100'); // Remove padding/bg to fit image
+                dockAccountIcon.classList.remove('p-1', 'bg-gray-100');
             } else {
-                // Else show standard User Icon
                 dockAccountIcon.innerHTML = `<i data-lucide="user" class="w-5 h-5 md:w-6 md:h-6"></i>`;
                 dockAccountIcon.classList.add('p-1');
+            }
+        }
+
+        // 4. NEW: Handle Mobile Top Right Login Option
+        if (mobileTopAuth) {
+            if (userObj) {
+                const savedPic = userData.getProfilePic();
+                if (savedPic) {
+                    // Shows Profile Pic if logged in
+                    mobileTopAuth.innerHTML = `<button onclick="navigateWithLoader('account.html')"><img src="${savedPic}" class="w-7 h-7 rounded-full object-cover border border-gray-200 shadow-sm"></button>`;
+                } else {
+                    // Shows User Icon if logged in but no pic
+                    mobileTopAuth.innerHTML = `<button onclick="navigateWithLoader('login.html')"><i data-lucide="user" class="w-6 h-6 text-gray-800"></i></button>`;
+                }
+            } else {
+                // Shows "Login" text if Guest
+                mobileTopAuth.innerHTML = ` <a href="login.html" class="flex items-center gap-2 hover:text-gold transition group">
+                        <div class="p-2 bg-gray-100 rounded-full group-hover:bg-black group-hover:text-white transition"><i data-lucide="user" class="w-4 h-4"></i></div>
+                        <span class="md:inline text-sm font-medium">Login</span>
+                    </a>`;
             }
         }
 
